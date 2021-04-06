@@ -26,6 +26,8 @@ class _StreamPlayer extends State<StreamPlayer> with SingleTickerProviderStateMi
 
   FlutterRadioPlayer _flutterRadioPlayer = new FlutterRadioPlayer();
 
+  int _tempStreamIndex = 0;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -46,6 +48,9 @@ class _StreamPlayer extends State<StreamPlayer> with SingleTickerProviderStateMi
     try {
       await _flutterRadioPlayer.init("Radio Sai", "radiosai", MyConstants.of(context).streamLink[index], "false");
       await _flutterRadioPlayer.play();
+      setState(() {
+        _tempStreamIndex = index;
+      });
     } on PlatformException {
       print("Execption while registering");
     }
@@ -97,7 +102,7 @@ class _StreamPlayer extends State<StreamPlayer> with SingleTickerProviderStateMi
         controller: _panelController,
         onPanelClosed: () {
           setState(() {
-            updateStreamIndex();
+            if(_tempStreamIndex != streamIndex) updateStreamIndex();
           });
         },
         collapsed: GestureDetector(
